@@ -1,0 +1,30 @@
+{
+	"compilerOptions": {
+	  "incremental": true,
+	  "target": "es2018",
+	  "module": "commonjs",
+	  "declaration": true,
+	  "declarationMap": true,
+	  "lib": [
+		"es2018"
+	  ],
+	  "sourceMap": true,
+	  "removeComments": false,
+	  "strict": true,
+	  "pretty": true,
+	  "noImplicitReturns": true,
+	  "noFallthroughCasesInSwitch": true,
+	  "esModuleInterop": true,
+	  "forceConsistentCasingInFileNames": true,
+	  "skipLibCheck": true,
+	  "outDir": "dist",
+	  "tsBuildInfoFile": "dist/.tsbuild"
+	},
+	"exclude": [
+	  "node_modules"
+	],
+	"include": [
+	  "src/**/*.ts",
+	  "test/**/*.ts"
+	]
+  }
