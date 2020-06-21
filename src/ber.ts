@@ -132,14 +132,13 @@ export function create(params: ErrorParams): BError {
 	// mark as berror
 	be.berror = true;
 
-	if (code) {
-		be.code = code;
-	}
+	// set code
+	be.code = code;
 
-	if (params.data) {
-		be.data = params.data ?? {};
-	}
+	// set data
+	be.data = params.data ?? {};
 
+	// set cause if any
 	if (params.cause) {
 		be.cause = params.cause;
 	}
@@ -176,8 +175,9 @@ export function getData(e: Error): ErrorData {
  * @param e error object
  * @param data error data
  */
-export function setData(e: Error, data: ErrorData): void {
+export function setData(e: Error, data: ErrorData): Error {
 	(e as BError).data = data;
+	return e;
 }
 
 /**
@@ -195,8 +195,9 @@ export function getCode(e: Error): string {
  * @param e error object
  * @param code error code
  */
-export function setCode(e: Error, code: string): void {
+export function setCode(e: Error, code: string): Error {
 	(e as BError).code = code;
+	return e;
 }
 
 /**
@@ -205,7 +206,7 @@ export function setCode(e: Error, code: string): void {
  * @returns false if transient flag has been set to false, true otherwise
  */
 export function isTransient(e: Error): boolean {
-	const transient = (e as BError).transient ?? true;
+	const transient = (e as BError)?.transient ?? true;
 	return transient;
 }
 
@@ -214,8 +215,9 @@ export function isTransient(e: Error): boolean {
  * @param e error object
  * @param transient transient value
  */
-export function setTransient(e: Error, transient: boolean): void {
+export function setTransient(e: Error, transient: boolean): Error {
 	(e as BError).transient = transient;
+	return e;
 }
 
 export default {
