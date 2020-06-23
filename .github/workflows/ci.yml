@@ -27,3 +27,6 @@ jobs:
 
     - name: test+cover
       run: node do cover
+
+    - name: publish
+      run: node do pub
