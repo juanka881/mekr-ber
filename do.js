@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const { task, sh } = require('watari');
 const shell = require('shelljs');
+const { execSync } = require('child_process');
+const semver = require('semver');
 
 const DIST = 'dist';
 const CONFIGS = 'configs';
@@ -62,6 +64,55 @@ function coverv() {
 	sh('start dist/.coverage/lcov-report/index.html');
 }
 
+function pack() {	
+	const outputDir = path.join(DIST, 'src');
+	if(!fs.existsSync(outputDir)) {
+		console.log('please run `node do build` first');
+		process.exit(1);
+	}
+
+    shell.cp('-u', 'package.json', outputDir);
+    sh('npm pack', { cwd: outputDir });
+}
+
+function pub() {
+	const package = JSON.parse(fs.readFileSync('./package.json'));
+	const packageVersion = package.version;
+	let npmVersion = '';
+	
+	// get current npm version
+	try {
+		npmVersion = execSync(`npm view ${package.name} version`, {
+			stdio: 'pipe'
+		}).toString().trim();
+	}
+	catch(e) {
+		const stderrr = ((e.stderr && e.stderr.toString()) || '');
+		if(e.status === 1 && stderrr.indexOf('npm ERR! code E404') !== -1) {
+			npmVersion = '0.0.0';
+		}
+		else {
+			throw e;
+		}
+	}
+
+	const isNextVersion = semver.gt(packageVersion, npmVersion);	
+	if(!isNextVersion) {
+		console.log(`npm version is newer or same, npm=${npmVersion} package=${packageVersion}`);
+		console.log('no action taken');
+		process.exit(0);
+	}
+
+	const outputDir = path.join(DIST, 'src');
+	if(!fs.existsSync(outputDir)) {
+		console.log('please run `node do build` first');
+		process.exit(1);
+	}
+
+	shell.cp('-u', 'package.json', outputDir);	
+	sh(`npm publish --access public`, { cwd: outputDir });
+}
+
 task({
 	clean,
 	fmt,
@@ -69,5 +120,7 @@ task({
 	test,
 	testw,
 	cover,
-	coverv
+	coverv,
+	pack,
+	pub
 });

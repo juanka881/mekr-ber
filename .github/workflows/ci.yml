@@ -10,15 +10,20 @@ jobs:
     - name: setup nodejs
       uses: actions/setup-node@v1.4.2
       with:
-        node-version: 12
+        node-version: '12.x'
+        always-auth: true
+        registry-url: https://registry.npmjs.org
+        scope: '@mekr'
 
     - uses: actions/checkout@v2
 
     - name: yarn install
-      run: yarn install        
+      run: yarn install --frozen-lockfile  
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
     - name: build
       run: node do build
 
-    - name: test
-      run: node do test
+    - name: test+cover
+      run: node do cover

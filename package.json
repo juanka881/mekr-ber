@@ -1,6 +1,6 @@
 {
   "name": "@mekr/ber",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
@@ -13,6 +13,7 @@
     "eslint": "^7.3.0",
     "jest": "^26.0.1",
     "prettier": "^2.0.5",
+    "semver": "^7.3.2",
     "shelljs": "^0.8.4",
     "ts-jest": "^26.1.0",
     "typescript": "^3.9.5",
@@ -27,6 +28,14 @@
     "coverageDirectory": "<rootDir>/dist/.coverage",
     "roots": [
       "<rootDir>/test"
-    ]
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    }
   }
 }
